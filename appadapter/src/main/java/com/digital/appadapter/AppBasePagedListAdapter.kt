@@ -2,7 +2,6 @@ package com.digital.appadapter
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -54,7 +53,7 @@ abstract class AppBasePagedListAdapter<T, VH : RecyclerView.ViewHolder, LVH : Re
                     //hide item
                     holder.itemView.visibility = View.GONE
                 } else {
-                    if (!holder.itemView.isVisible)
+                    if (holder.itemView.visibility != View.VISIBLE)
                         holder.itemView.visibility = View.VISIBLE
                     onBindLVH(holder as LVH, position)
                 }
