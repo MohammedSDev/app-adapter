@@ -38,5 +38,6 @@ dependencies {
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
 
+//    implementation 'com.github.MohammedSDev:app-adapter:1.0.0'
     implementation project(":appadapter")
 }
