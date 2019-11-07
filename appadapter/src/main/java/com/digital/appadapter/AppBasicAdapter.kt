@@ -1,14 +1,7 @@
 package com.digital.appadapter
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import java.lang.IllegalArgumentException
 
-// VH : AppViewHolder, LVH : AppViewHolder
 abstract class AppBasicAdapter<T, VH : AppViewHolder> : RecyclerView.Adapter<VH>() {
 
     var autoNotify:Boolean = true
@@ -24,11 +17,11 @@ abstract class AppBasicAdapter<T, VH : AppViewHolder> : RecyclerView.Adapter<VH>
 //
 //    }
 
-    final override fun onBindViewHolder(holder: VH, position: Int) {
+    override fun onBindViewHolder(holder: VH, position: Int) {
         holder.onBind(position)
     }
 
-    final override fun getItemCount(): Int {
+     override fun getItemCount(): Int {
         return getCount()
     }
 

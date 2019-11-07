@@ -40,6 +40,13 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
                     "override `onCreateViewHolder` function.")
     }
 
+    final override fun onBindViewHolder(holder: AppViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+    }
+
+    final override fun getItemCount(): Int {
+        return super.getItemCount()
+    }
 
     /**
      * create Vh using layout res
