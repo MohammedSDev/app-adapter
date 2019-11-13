@@ -17,6 +17,7 @@ open class AppPagedListAdapter<T>(
     private var onCreateL: ((parent: ViewGroup, viewType: Int) -> AppViewHolder)? = null
     private var onCreate: ((parent: ViewGroup, viewType: Int) -> AppViewHolder)? = null
     private var layoutRes: Int = -1
+    private var viewType: ((pos: Int) -> Int)? = null
 
 
     private inner class AppVH(v: View) : AppViewHolder(v) {
@@ -76,6 +77,22 @@ open class AppPagedListAdapter<T>(
     }
 
 
+    /**
+     * Blocks constructor
+     * */
+    constructor(
+        diffCallback: DiffUtil.ItemCallback<T>,
+        getViewType: (pos: Int) -> Int
+        ,onCreateVH: (parent: ViewGroup, viewType: Int) -> AppViewHolder
+        , onCreateLVH: ((parent: ViewGroup, viewType: Int) -> AppViewHolder)? = null
+    ) : this(diffCallback) {
+
+        this.onCreate = onCreateVH
+        this.onCreateL = onCreateLVH
+        this.viewType = getViewType
+    }
+
+
     private fun onCreateBasicVHFromLayoutRes(
         parent: ViewGroup,
         customBVH: Class<out AppViewHolder>
@@ -113,5 +130,9 @@ open class AppPagedListAdapter<T>(
 
     final override fun onBindLVH(holder: AppViewHolder, position: Int) {
         holder.onBind(position)
+    }
+
+    override fun getLayoutType(pos: Int): Int {
+        return viewType?.invoke(pos) ?: super.getLayoutType(pos)
     }
 }
