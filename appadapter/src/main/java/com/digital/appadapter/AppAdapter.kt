@@ -11,7 +11,7 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
     private var onCreate: ((parent:ViewGroup,viewType: Int) -> AppViewHolder)? = null
     private var layoutRes: Int = -1
     private var customBVH: Class<out AppViewHolder>? = null
-
+    private var itemType: ((position:Int) ->Int)? = null
 
     constructor(@LayoutRes layoutRes: Int, customBVH: Class<out AppViewHolder>):this() {
         this.layoutRes = layoutRes
@@ -24,8 +24,20 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
     constructor(onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder ):this() {
         this.onCreate = onCreate
     }
+    constructor(getItemType:(position:Int) -> Int,onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder ):this() {
+        this.onCreate = onCreate
+        this.itemType = getItemType
+    }
 
 
+    /**
+     * check if onCreate passed
+     * else if layoutRes exist,then check
+     *                        if custom VH passed
+     *                        or
+     *                        onBind passed
+     * else throw exception
+     * */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
         val customVH = customBVH
         val create = onCreate
@@ -47,6 +59,11 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
     final override fun getItemCount(): Int {
         return super.getItemCount()
     }
+
+    final override fun getItemViewType(position: Int): Int {
+        return itemType?.invoke(position) ?: super.getItemViewType(position)
+    }
+
 
     /**
      * create Vh using layout res
