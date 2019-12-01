@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+        recycler.adapter = adapter
         //multi view type
         val adapter2 = AppPagedListAdapter(diff,
             { pos: Int ->
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
             })
+        recycler.adapter = adapter
 
         /**
          * how to ue AppAdapter:
@@ -184,6 +186,7 @@ class MainActivity : AppCompatActivity() {
 
     class MVH(override val containerView: View) : AppViewHolder(containerView), LayoutContainer {
         override fun onBind(position: Int) {
+            itemTVOne.text = "My OWn item MVH: $position"
             itemTVOne.text = "item MVH: $position"
         }
 
