@@ -1,5 +1,5 @@
 # app-adapter
-![Release](https://jitpack.io/v/MohammedSDev/app-adapter.svg)
+![Release](https://jitpack.io/v/clickapps-android/app-adapter.svg)
 
 
 App-adapter is an easy,flexible library for you Android customized RecyclerView.Adapter &amp;  PagedListAdapter for an easy use.
