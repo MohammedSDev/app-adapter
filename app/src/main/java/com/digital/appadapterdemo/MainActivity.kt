@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
+}/*
 
         val diff = object : DiffUtil.ItemCallback<String>() {
             override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
@@ -74,9 +76,11 @@ class MainActivity : AppCompatActivity() {
             })
         recycler.adapter = adapter
 
-        /**
-         * how to ue AppAdapter:
-         * */
+        */
+/**
+ * how to ue AppAdapter:
+ * *//*
+
         //way:1
         recycler.adapter = AppAdapter<String>(R.layout.item, MVH::class.java).also {
             it.list = listOf("One", "Two", "Three")
@@ -192,3 +196,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 }
+*/

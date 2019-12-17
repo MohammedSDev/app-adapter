@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item.*
 /**
  * create your own VH.
  * */
-class AppPagedListAdapterTwo : AppPagedListAdapter<String>(diff) {
+class AppPagedListAdapterTwo /*: AppPagedListAdapter<String>(diff) {
 
     companion object {
         val diff = object : DiffUtil.ItemCallback<String>() {
@@ -43,4 +43,4 @@ class AppPagedListAdapterTwo : AppPagedListAdapter<String>(diff) {
 
 
 
-}
+}*/

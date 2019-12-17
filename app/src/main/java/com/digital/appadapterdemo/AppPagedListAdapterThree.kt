@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item.*
 /**
  * create your own VH.
  * */
-class AppPagedListAdapterThree : AppPagedListAdapter<String>(diff,R.layout.item
+class AppPagedListAdapterThree /*: AppPagedListAdapter<String>(diff,R.layout.item
     ,MyCusVH::class.java) {
 
     companion object {
@@ -42,4 +42,4 @@ class AppPagedListAdapterThree : AppPagedListAdapter<String>(diff,R.layout.item
 
 
 
-}
+}*/

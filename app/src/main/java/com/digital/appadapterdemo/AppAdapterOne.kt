@@ -8,7 +8,7 @@ import com.digital.appadapter.AppViewHolder
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item.*
 
-class AppAdapterOne : AppAdapter<String>() {
+class AppAdapterOne /*: AppAdapter<String>() {
 
 
     class MyViewHolder(override val containerView: View):AppViewHolder(containerView),LayoutContainer{
@@ -20,4 +20,4 @@ class AppAdapterOne : AppAdapter<String>() {
         return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item,parent,false))
     }
 
-}
+}*/

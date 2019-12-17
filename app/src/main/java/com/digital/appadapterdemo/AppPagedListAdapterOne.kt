@@ -10,7 +10,7 @@ import com.digital.appadapter.AppViewHolder
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item.*
 
-class AppPagedListAdapterOne : AppPagedListAdapter<String>(diff) {
+class AppPagedListAdapterOne /*: AppPagedListAdapter<String>(diff) {
 
     companion object {
         val diff = object : DiffUtil.ItemCallback<String>() {
@@ -53,4 +53,4 @@ class AppPagedListAdapterOne : AppPagedListAdapter<String>(diff) {
     }
 
 
-}
+}*/
