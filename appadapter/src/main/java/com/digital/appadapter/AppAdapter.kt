@@ -5,26 +5,26 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import java.lang.IllegalArgumentException
 
-open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
+open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
 
-    private var onBind: (AppViewHolder.(position: Int) -> Unit)? = null
-    private var onCreate: ((parent:ViewGroup,viewType: Int) -> AppViewHolder)? = null
+    private var onBind: (AppViewHolder<T>.(position: T?) -> Unit)? = null
+    private var onCreate: ((parent:ViewGroup,viewType: Int) -> AppViewHolder<T>)? = null
     private var layoutRes: Int = -1
-    private var customBVH: Class<out AppViewHolder>? = null
+    private var customBVH: Class<out AppViewHolder<T>>? = null
     private var itemType: ((position:Int) ->Int)? = null
 
-    constructor(@LayoutRes layoutRes: Int, customBVH: Class<out AppViewHolder>):this() {
+    constructor(@LayoutRes layoutRes: Int, customBVH: Class<out AppViewHolder<T>>):this() {
         this.layoutRes = layoutRes
         this.customBVH = customBVH
     }
-    constructor(@LayoutRes layoutRes: Int, onBind:AppViewHolder.(position:Int)->Unit ):this() {
+    constructor(@LayoutRes layoutRes: Int, onBind:AppViewHolder<T>.(item:T?)->Unit ):this() {
         this.layoutRes = layoutRes
         this.onBind = onBind
     }
-    constructor(onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder ):this() {
+    constructor(onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder<T> ):this() {
         this.onCreate = onCreate
     }
-    constructor(getItemType:(position:Int) -> Int,onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder ):this() {
+    constructor(getItemType:(position:Int) -> Int,onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder<T> ):this() {
         this.onCreate = onCreate
         this.itemType = getItemType
     }
@@ -38,7 +38,7 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
      *                        onBind passed
      * else throw exception
      * */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder<T> {
         val customVH = customBVH
         val create = onCreate
         return create?.invoke(parent,viewType) ?: if (layoutRes != -1)
@@ -52,7 +52,7 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
                     "override `onCreateViewHolder` function.")
     }
 
-    final override fun onBindViewHolder(holder: AppViewHolder, position: Int) {
+    final override fun onBindViewHolder(holder: AppViewHolder<T>, position: Int) {
         super.onBindViewHolder(holder, position)
     }
 
@@ -70,8 +70,8 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
      * */
     private fun createReflectionVHLayoutRes(
         parent: ViewGroup,
-        customBVH: Class<out AppViewHolder>
-    ): AppViewHolder {
+        customBVH: Class<out AppViewHolder<T>>
+    ): AppViewHolder<T> {
         val view = parent.appInflate(layoutRes)
         val cc:Class<View> = View::class.java
         val o = customBVH.getConstructor(cc)
@@ -83,11 +83,11 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder>() {
      * */
     private fun createBinderVHLayoutRes(
         parent: ViewGroup
-    ): AppViewHolder {
+    ): AppViewHolder<T> {
         val view = parent.appInflate(layoutRes)
-        return object:AppViewHolder(view){
-            override fun onBind(position: Int) {
-                onBind?.invoke(this,position)
+        return object:AppViewHolder<T>(view){
+            override fun onBind(item: T?) {
+                onBind?.invoke(this,item)
             }
         }
     }

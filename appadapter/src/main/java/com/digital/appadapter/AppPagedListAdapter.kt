@@ -9,25 +9,25 @@ import java.lang.IllegalArgumentException
 // VH : AppViewHolder, LVH : AppViewHolder
 open class AppPagedListAdapter<T>(
     diffCallback: DiffUtil.ItemCallback<T>
-) : AppBasePagedListAdapter<T, AppViewHolder, AppViewHolder>(diffCallback) {
+) : AppBasePagedListAdapter<T, AppViewHolder<T>, AppViewHolder<Any>>(diffCallback) {
 
-    private var customBVH: Class<out AppViewHolder>? = null
-    private var onBindL: (AppViewHolder.() -> Unit)? = null
-    private var onBind: (AppViewHolder.(position: Int) -> Unit)? = null
-    private var onCreateL: ((parent: ViewGroup, viewType: Int) -> AppViewHolder)? = null
-    private var onCreate: ((parent: ViewGroup, viewType: Int) -> AppViewHolder)? = null
+    private var customBVH: Class<out AppViewHolder<T>>? = null
+    private var onBindL: (AppViewHolder<Any>.() -> Unit)? = null
+    private var onBind: (AppViewHolder<T>.(item: T?) -> Unit)? = null
+    private var onCreateL: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<Any>)? = null
+    private var onCreate: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<T>)? = null
     private var layoutRes: Int = -1
     private var viewType: ((pos: Int) -> Int)? = null
 
 
-    private inner class AppVH(v: View) : AppViewHolder(v) {
-        override fun onBind(position: Int) {
-            onBind?.invoke(this, position)
+    private inner class AppVH(v: View) : AppViewHolder<T>(v) {
+        override fun onBind(item: T?) {
+            onBind?.invoke(this, item)
         }
     }
 
-    private inner class AppLVH(v: View) : AppViewHolder(v) {
-        override fun onBind(position: Int) {
+    private inner class AppLVH(v: View) : AppViewHolder<Any>(v) {
+        override fun onBind(item: Any?) {
             onBindL?.invoke(this)
         }
     }
@@ -38,12 +38,12 @@ open class AppPagedListAdapter<T>(
     constructor(
         diffCallback: DiffUtil.ItemCallback<T>
         , @LayoutRes layoutRes: Int
-        , customBVH: Class<out AppViewHolder>
+        , customVH: Class<out AppViewHolder<T>>
     ) : this(
         diffCallback
     ) {
         this.layoutRes = layoutRes
-        this.customBVH = customBVH
+        this.customBVH = customVH
     }
 
     /**
@@ -51,8 +51,8 @@ open class AppPagedListAdapter<T>(
      * */
     constructor(
         diffCallback: DiffUtil.ItemCallback<T>,
-        onCreateVH: (parent: ViewGroup, viewType: Int) -> AppViewHolder
-        , onCreateLVH: ((parent: ViewGroup, viewType: Int) -> AppViewHolder)? = null
+        onCreateVH: (parent: ViewGroup, viewType: Int) -> AppViewHolder<T>
+        , onCreateLVH: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<Any>)? = null
     ) : this(diffCallback) {
 
         this.onCreate = onCreateVH
@@ -66,8 +66,8 @@ open class AppPagedListAdapter<T>(
     constructor(
         diffCallback: DiffUtil.ItemCallback<T>,
         layoutRes: Int
-        , onBindVH: (AppViewHolder.(position: Int) -> Unit)
-        , onBindLVH: (AppViewHolder.() -> Unit)? = null
+        , onBindVH: (AppViewHolder<T>.(item: T?) -> Unit)
+        , onBindLVH: (AppViewHolder<Any>.() -> Unit)? = null
 
     ) : this(diffCallback) {
 
@@ -83,8 +83,8 @@ open class AppPagedListAdapter<T>(
     constructor(
         diffCallback: DiffUtil.ItemCallback<T>,
         getViewType: (pos: Int) -> Int
-        ,onCreateVH: (parent: ViewGroup, viewType: Int) -> AppViewHolder
-        , onCreateLVH: ((parent: ViewGroup, viewType: Int) -> AppViewHolder)? = null
+        ,onCreateVH: (parent: ViewGroup, viewType: Int) -> AppViewHolder<T>
+        , onCreateLVH: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<Any>)? = null
     ) : this(diffCallback) {
 
         this.onCreate = onCreateVH
@@ -95,20 +95,20 @@ open class AppPagedListAdapter<T>(
 
     private fun onCreateBasicVHFromLayoutRes(
         parent: ViewGroup,
-        customBVH: Class<out AppViewHolder>
-    ): AppViewHolder {
+        customBVH: Class<out AppViewHolder<T>>
+    ): AppViewHolder<T> {
         val view = parent.appInflate(layoutRes)
         return customBVH.getConstructor(View::class.java).newInstance(view)
     }
 
     private fun onCreateBasicVHFromLayoutRes(
         parent: ViewGroup
-    ): AppViewHolder {
+    ): AppViewHolder<T> {
         val view = parent.appInflate(layoutRes)
         return AppVH(view)
     }
 
-    override fun onCreateBasicVH(parent: ViewGroup, viewType: Int): AppViewHolder {
+    override fun onCreateBasicVH(parent: ViewGroup, viewType: Int): AppViewHolder<T> {
         val customVH = customBVH
         return onCreate?.invoke(parent, viewType) ?: if (layoutRes != -1)
             if (customVH != null)
@@ -120,16 +120,16 @@ open class AppPagedListAdapter<T>(
             IllegalArgumentException("you have to pass `onCreateVH` or override `onCreateBasicVH` function. ")
     }
 
-    final override fun onBindBasicVH(holder: AppViewHolder, position: Int) {
-        holder.onBind(position)
+    final override fun onBindBasicVH(holder: AppViewHolder<T>, position: Int) {
+        holder.onBind(getItem(position))
     }
 
-    override fun onCreateLVH(parent: ViewGroup, viewType: Int): AppViewHolder {
+    override fun onCreateLVH(parent: ViewGroup, viewType: Int): AppViewHolder<Any> {
         return this.onCreateL?.invoke(parent, viewType) ?: AppLVH(View(parent.context))
     }
 
-    final override fun onBindLVH(holder: AppViewHolder, position: Int) {
-        holder.onBind(position)
+    final override fun onBindLVH(holder: AppViewHolder<Any>, position: Int) {
+        holder.onBind(getItem(position))
     }
 
     override fun getLayoutType(pos: Int): Int {
