@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class AppViewHolder<M>(v:View) : RecyclerView.ViewHolder(v) {
 
     abstract fun onBind(item:M?)
+    internal var adapter:RecyclerView.Adapter<*>? = null
 
-
-
+    fun <A>getAdapter():A{
+        return adapter as A
+    }
     fun <T : View> get(id: Int): T {
         return customFindCachedViewById(id) as T
     }

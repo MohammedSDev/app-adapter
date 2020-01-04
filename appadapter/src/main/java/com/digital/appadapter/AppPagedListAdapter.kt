@@ -112,9 +112,9 @@ open class AppPagedListAdapter<T>(
         val customVH = customBVH
         return onCreate?.invoke(parent, viewType) ?: if (layoutRes != -1)
             if (customVH != null)
-                onCreateBasicVHFromLayoutRes(parent, customVH)
+                onCreateBasicVHFromLayoutRes(parent, customVH).also { it.adapter = this }
             else
-                onCreateBasicVHFromLayoutRes(parent)
+                onCreateBasicVHFromLayoutRes(parent).also { it.adapter = this }
         else
             throw
             IllegalArgumentException("you have to pass `onCreateVH` or override `onCreateBasicVH` function. ")

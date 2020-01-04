@@ -43,9 +43,9 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
         val create = onCreate
         return create?.invoke(parent,viewType) ?: if (layoutRes != -1)
             if(customVH != null)
-                createReflectionVHLayoutRes(parent, customVH )
+                createReflectionVHLayoutRes(parent, customVH ).also { it.adapter = this }
             else
-                createBinderVHLayoutRes(parent)
+                createBinderVHLayoutRes(parent).also { it.adapter = this }
         else
             throw
             IllegalArgumentException("you have to pass `layoutRes & customVH` or `layoutRes & block` or " +
