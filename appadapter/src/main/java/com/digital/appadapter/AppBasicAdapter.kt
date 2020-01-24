@@ -2,8 +2,9 @@ package com.digital.appadapter
 
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class AppBasicAdapter<T, VH : AppViewHolder<T>> : RecyclerView.Adapter<VH>() {
+abstract class AppBasicAdapter<T, VH : AppViewHolder<T>> : RecyclerView.Adapter<VH>(),AppRecyclerAdapter<T> {
 
+    override var callBack: OnItemClick<T>? = null
     var autoNotify:Boolean = true
     var list: List<T> = mutableListOf()
     set(value) {
@@ -33,4 +34,7 @@ abstract class AppBasicAdapter<T, VH : AppViewHolder<T>> : RecyclerView.Adapter<
      * default: list.size
      * */
     open fun getCount():Int = list.size
+
+    final override fun getItemModel(pos: Int): T = list[pos]
+
 }

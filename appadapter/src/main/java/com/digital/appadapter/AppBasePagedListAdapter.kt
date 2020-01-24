@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class AppBasePagedListAdapter<T, VH : RecyclerView.ViewHolder, LVH : RecyclerView.ViewHolder>(
     diffCallback: DiffUtil.ItemCallback<T>
 ) :
-    PagedListAdapter<T, RecyclerView.ViewHolder>(diffCallback) {
+    PagedListAdapter<T, RecyclerView.ViewHolder>(diffCallback),AppRecyclerAdapter<T> {
 
     val LOODER_TYPE = 2
     val BASIC_VIEW_TYPE = 3
@@ -20,7 +20,7 @@ abstract class AppBasePagedListAdapter<T, VH : RecyclerView.ViewHolder, LVH : Re
     var messageRetryLoadMore = ""
     var mLoadMoreErrorOccur = false
 
-    var callBack: OnItemClick<T>? = null
+    override var callBack: OnItemClick<T>? = null
 
 
     abstract fun onCreateBasicVH(parent: ViewGroup, viewType: Int): VH
@@ -89,7 +89,7 @@ abstract class AppBasePagedListAdapter<T, VH : RecyclerView.ViewHolder, LVH : Re
         mEnableFooter = true
     }
 
-
+    final override fun getItemModel(pos: Int): T?  = getItem(pos)
 
     /**
      * return your custom layout Type int.
