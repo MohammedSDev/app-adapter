@@ -12,8 +12,8 @@ abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
         callback?.invoke(it, adapterPosition, getItem()!!, tag)
     }
 
-    fun <A : AppRecyclerAdapter<M>> getAdapter(): A? {
-        return adapter as? A
+    fun <A : AppRecyclerAdapter<M>> getAdapter(): A {
+        return adapter as A
     }
 
     fun <T : View> get(id: Int): T {
