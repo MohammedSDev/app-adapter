@@ -41,7 +41,7 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder<T> {
         val customVH = customBVH
         val create = onCreate
-        return create?.invoke(parent,viewType) ?: if (layoutRes != -1)
+        return create?.invoke(parent,viewType)?.also { it.adapter = this } ?: if (layoutRes != -1)
             if(customVH != null)
                 createReflectionVHLayoutRes(parent, customVH ).also { it.adapter = this }
             else
