@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.paging.DataSource
 
 typealias OnItemClick<T> = (view: View, position: Int, model: T, any: String?) -> Unit
 
@@ -20,4 +21,12 @@ fun appInflate(
 ): View {
     return LayoutInflater.from(context).inflate(layoutRes, root, attach)
 
+}
+
+fun <K,M>getDSF(body:()->DataSource<K, M>):DataSource.Factory<K, M>{
+    return object: DataSource.Factory<K,M>(){
+        override fun create(): DataSource<K, M> {
+            return body()
+        }
+    }
 }
