@@ -23,7 +23,7 @@ fun appInflate(
 
 }
 
-fun <K,M>getDSF(body:()->DataSource<K, M>):DataSource.Factory<K, M>{
+inline fun <K,M>getDSF(crossinline body:()->DataSource<K, M>):DataSource.Factory<K, M>{
     return object: DataSource.Factory<K,M>(){
         override fun create(): DataSource<K, M> {
             return body()
