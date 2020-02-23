@@ -37,4 +37,13 @@ abstract class AppBasicAdapter<T, VH : AppViewHolder<T>> : RecyclerView.Adapter<
 
     final override fun getItemModel(pos: Int): T = list[pos]
 
+
+    fun setCallback(callback:OnItemClick<T>):AppBasicAdapter<T, VH>{
+        this.callBack = callback
+        return this
+    }
+    fun setList(items:List<T>):AppBasicAdapter<T, VH>{
+        this.list = items
+        return this
+    }
 }

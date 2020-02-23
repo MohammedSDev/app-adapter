@@ -96,5 +96,8 @@ abstract class AppBasePagedListAdapter<T, VH : RecyclerView.ViewHolder, LVH : Re
      * */
     open fun getLayoutType(pos:Int):Int = BASIC_VIEW_TYPE
 
-
+    fun setCallback(callback:OnItemClick<T>): AppBasePagedListAdapter<T, VH, LVH> {
+        this.callBack = callback
+        return this
+    }
 }

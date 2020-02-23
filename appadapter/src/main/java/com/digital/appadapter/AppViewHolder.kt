@@ -1,6 +1,12 @@
 package com.digital.appadapter
 
+import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
@@ -29,6 +35,15 @@ abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
     fun callCallBack(view: View, pos: Int, item: M, tag: String? = null) {
         callback?.invoke(view, pos, item, tag)
     }
+
+
+    fun getString(@StringRes resId:Int):String = itemView.context.getString(resId)
+    fun getColorComp(@ColorRes resId:Int):Int = ContextCompat.getColor(itemView.context,resId)
+    fun getDrawableComp(@DrawableRes resId:Int):Drawable? = ContextCompat.getDrawable(itemView.context,resId)
+    fun getDimenComp(@DimenRes resId:Int):Float? = itemView.context.resources.getDimension(resId)
+
+
+
 
     /**
      * call onItemClick when specific view clicked
