@@ -1,7 +1,9 @@
 # app-adapter
 
-![Release](https://jitpack.io/v/MohammedSDev/app-adapter.svg)
-
+![Release](https://jitpack.io/v/clickapps-android/app-adapter.svg)
+<!--MohammedSDev
+clickapps-android
+-->
 
 App-adapter is an easy,flexible library for you Android customized RecyclerView.Adapter &amp;  PagedListAdapter for an easy use.
 you can use it directally inside you Activity/Fragment or in a separate class.just create you item design 
@@ -26,7 +28,7 @@ in app level build.gradle
 ```gradle
 dependencies {
 
-        implementation 'com.github.MohammedSDev:app-adapter:1.0.1'
+        implementation 'com.github.clickapps-android:app-adapter:1.0.1'
 }
 ```
 
