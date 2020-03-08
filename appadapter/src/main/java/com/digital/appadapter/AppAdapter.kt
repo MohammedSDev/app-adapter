@@ -8,23 +8,29 @@ import java.lang.IllegalArgumentException
 open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
 
     private var onBind: (AppViewHolder<T>.(position: T?) -> Unit)? = null
-    private var onCreate: ((parent:ViewGroup,viewType: Int) -> AppViewHolder<T>)? = null
+    private var onCreate: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<T>)? = null
     private var layoutRes: Int = -1
     private var customBVH: Class<out AppViewHolder<T>>? = null
-    private var itemType: ((position:Int) ->Int)? = null
+    private var itemType: ((position: Int) -> Int)? = null
 
-    constructor(@LayoutRes layoutRes: Int, customBVH: Class<out AppViewHolder<T>>):this() {
+    constructor(@LayoutRes layoutRes: Int, customBVH: Class<out AppViewHolder<T>>) : this() {
         this.layoutRes = layoutRes
         this.customBVH = customBVH
     }
-    constructor(@LayoutRes layoutRes: Int, onBind:AppViewHolder<T>.(item:T?)->Unit ):this() {
+
+    constructor(@LayoutRes layoutRes: Int, onBind: AppViewHolder<T>.(item: T?) -> Unit) : this() {
         this.layoutRes = layoutRes
         this.onBind = onBind
     }
-    constructor(onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder<T> ):this() {
+
+    constructor(onCreate: (parent: ViewGroup, viewType: Int) -> AppViewHolder<T>) : this() {
         this.onCreate = onCreate
     }
-    constructor(getItemType:(position:Int) -> Int,onCreate:(parent:ViewGroup,viewType:Int)->AppViewHolder<T> ):this() {
+
+    constructor(
+        getItemType: (position: Int) -> Int,
+        onCreate: (parent: ViewGroup, viewType: Int) -> AppViewHolder<T>
+    ) : this() {
         this.onCreate = onCreate
         this.itemType = getItemType
     }
@@ -41,15 +47,26 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder<T> {
         val customVH = customBVH
         val create = onCreate
-        return create?.invoke(parent,viewType)?.also { it.adapter = this } ?: if (layoutRes != -1)
-            if(customVH != null)
-                createReflectionVHLayoutRes(parent, customVH ).also { it.adapter = this }
+        return create?.invoke(parent, viewType)?.also {
+            it.adapter = this
+            it.prepareView()
+        } ?: if (layoutRes != -1)
+            if (customVH != null)
+                createReflectionVHLayoutRes(parent, customVH).also {
+                    it.adapter = this
+                    it.prepareView()
+                }
             else
-                createBinderVHLayoutRes(parent).also { it.adapter = this }
+                createBinderVHLayoutRes(parent).also {
+                    it.adapter = this
+                    it.prepareView()
+                }
         else
             throw
-            IllegalArgumentException("you have to pass `layoutRes & customVH` or `layoutRes & block` or " +
-                    "override `onCreateViewHolder` function.")
+            IllegalArgumentException(
+                "you have to pass `layoutRes & customVH` or `layoutRes & block` or " +
+                        "override `onCreateViewHolder` function."
+            )
     }
 
     final override fun onBindViewHolder(holder: AppViewHolder<T>, position: Int) {
@@ -73,7 +90,7 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
         customBVH: Class<out AppViewHolder<T>>
     ): AppViewHolder<T> {
         val view = parent.appInflate(layoutRes)
-        val cc:Class<View> = View::class.java
+        val cc: Class<View> = View::class.java
         val o = customBVH.getConstructor(cc)
         return o.newInstance(view)
     }
@@ -85,9 +102,9 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
         parent: ViewGroup
     ): AppViewHolder<T> {
         val view = parent.appInflate(layoutRes)
-        return object:AppViewHolder<T>(view){
+        return object : AppViewHolder<T>(view) {
             override fun onBind(item: T?) {
-                onBind?.invoke(this,item)
+                onBind?.invoke(this, item)
             }
         }
     }

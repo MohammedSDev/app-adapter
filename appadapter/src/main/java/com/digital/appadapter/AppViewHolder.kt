@@ -2,6 +2,7 @@ package com.digital.appadapter
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
 
+    fun prepareView(){}
     abstract fun onBind(item: M?)
     internal var adapter: RecyclerView.Adapter<*>? = null
     private var tag: String? = null

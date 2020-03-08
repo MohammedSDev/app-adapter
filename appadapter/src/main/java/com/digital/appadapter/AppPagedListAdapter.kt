@@ -110,11 +110,17 @@ open class AppPagedListAdapter<T>(
 
     override fun onCreateBasicVH(parent: ViewGroup, viewType: Int): AppViewHolder<T> {
         val customVH = customBVH
-        return onCreate?.invoke(parent, viewType)?.also { it.adapter = this } ?: if (layoutRes != -1)
+        return onCreate?.invoke(parent, viewType)?.also { it.adapter = this
+            it.prepareView()
+        } ?: if (layoutRes != -1)
             if (customVH != null)
-                onCreateBasicVHFromLayoutRes(parent, customVH).also { it.adapter = this }
+                onCreateBasicVHFromLayoutRes(parent, customVH).also { it.adapter = this
+                    it.prepareView()
+                }
             else
-                onCreateBasicVHFromLayoutRes(parent).also { it.adapter = this }
+                onCreateBasicVHFromLayoutRes(parent).also { it.adapter = this
+                    it.prepareView()
+                }
         else
             throw
             IllegalArgumentException("you have to pass `onCreateVH` or override `onCreateBasicVH` function. ")
@@ -125,7 +131,13 @@ open class AppPagedListAdapter<T>(
     }
 
     override fun onCreateLVH(parent: ViewGroup, viewType: Int): AppViewHolder<Any> {
-        return this.onCreateL?.invoke(parent, viewType) ?: AppLVH(View(parent.context))
+        return this.onCreateL?.invoke(parent, viewType)?.also {
+            it.adapter = this
+            it.prepareView()
+        } ?: AppLVH(View(parent.context)).also {
+            it.adapter = this
+            it.prepareView()
+        }
     }
 
     final override fun onBindLVH(holder: AppViewHolder<Any>, position: Int) {
