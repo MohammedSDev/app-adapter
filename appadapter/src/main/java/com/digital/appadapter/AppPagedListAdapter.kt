@@ -111,15 +111,15 @@ open class AppPagedListAdapter<T>(
     override fun onCreateBasicVH(parent: ViewGroup, viewType: Int): AppViewHolder<T> {
         val customVH = customBVH
         return onCreate?.invoke(parent, viewType)?.also { it.adapter = this
-            it.prepareView()
+            it.onCreate(viewType)
         } ?: if (layoutRes != -1)
             if (customVH != null)
                 onCreateBasicVHFromLayoutRes(parent, customVH).also { it.adapter = this
-                    it.prepareView()
+                    it.onCreate(viewType)
                 }
             else
                 onCreateBasicVHFromLayoutRes(parent).also { it.adapter = this
-                    it.prepareView()
+                    it.onCreate(viewType)
                 }
         else
             throw
@@ -133,10 +133,10 @@ open class AppPagedListAdapter<T>(
     override fun onCreateLVH(parent: ViewGroup, viewType: Int): AppViewHolder<Any> {
         return this.onCreateL?.invoke(parent, viewType)?.also {
             it.adapter = this
-            it.prepareView()
+            it.onCreate(viewType)
         } ?: AppLVH(View(parent.context)).also {
             it.adapter = this
-            it.prepareView()
+            it.onCreate(viewType)
         }
     }
 

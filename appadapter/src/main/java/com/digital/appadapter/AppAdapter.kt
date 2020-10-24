@@ -49,17 +49,17 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
         val create = onCreate
         return create?.invoke(parent, viewType)?.also {
             it.adapter = this
-            it.prepareView()
+            it.onCreate(viewType)
         } ?: if (layoutRes != -1)
             if (customVH != null)
                 createReflectionVHLayoutRes(parent, customVH).also {
                     it.adapter = this
-                    it.prepareView()
+                    it.onCreate(viewType)
                 }
             else
                 createBinderVHLayoutRes(parent).also {
                     it.adapter = this
-                    it.prepareView()
+                    it.onCreate(viewType)
                 }
         else
             throw

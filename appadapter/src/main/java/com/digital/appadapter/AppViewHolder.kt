@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
 
-    fun prepareView(){}
+    open fun onCreate(viewType:Int){}
     abstract fun onBind(item: M?)
     internal var adapter: RecyclerView.Adapter<*>? = null
     private var tag: String? = null
