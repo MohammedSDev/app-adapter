@@ -73,7 +73,7 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
         super.onBindViewHolder(holder, position)
     }
 
-    final override fun getItemCount(): Int {
+    override fun getItemCount(): Int {
         return super.getItemCount()
     }
 
