@@ -29,7 +29,7 @@ abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
     }
 
     fun getItem(pos: Int = adapterPosition): M? =
-        getAdapter<AppRecyclerAdapter<M>>()?.getItemModel(pos)
+        runCatching { getAdapter<AppRecyclerAdapter<M>>()?.getItemModel(pos) }.getOrNull()
 
     private val callback
         get() = getAdapter<AppRecyclerAdapter<M>>()?.callBack
