@@ -6,7 +6,8 @@ import androidx.paging.PageKeyedDataSource
 /**
  * PageKeyedDataSource include support for retry load after.
  * */
-abstract class AppPageKeyedDS<K, T> : PageKeyedDataSource<K, T>() {
+@Deprecated("use PagingSource")
+abstract class AppPageKeyedDS<K:Any, T:Any> : PageKeyedDataSource<K, T>() {
 
 	private var appParams: LoadParams<K>? = null
 	private var appCallback: LoadCallback<K, T>? = null

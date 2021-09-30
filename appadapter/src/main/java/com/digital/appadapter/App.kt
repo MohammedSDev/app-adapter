@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.paging.DataSource
+import androidx.paging.PagingSource
 
 typealias OnItemClick<T> = (view: View, position: Int, model: T, any: String?) -> Unit
 
@@ -23,7 +24,8 @@ fun appInflate(
 
 }
 
-inline fun <K,M>getDSF(crossinline body:()->DataSource<K, M>):DataSource.Factory<K, M>{
+@Deprecated("use PagingSource")
+inline fun <K:Any,M:Any>getDSF(crossinline body:()->DataSource<K, M>):DataSource.Factory<K, M>{
     return object: DataSource.Factory<K,M>(){
         override fun create(): DataSource<K, M> {
             return body()

@@ -7,14 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import java.lang.IllegalArgumentException
 
 // VH : AppViewHolder, LVH : AppViewHolder
-open class AppPagedListAdapter<T>(
+open class AppPagedListAdapter<T:Any>(
     diffCallback: DiffUtil.ItemCallback<T>
-) : AppBasePagedListAdapter<T, AppViewHolder<T>, AppViewHolder<Any>>(diffCallback) {
+) : AppBasePagedListAdapter<T, AppViewHolder<T>>(diffCallback) {
 
     private var customBVH: Class<out AppViewHolder<T>>? = null
-    private var onBindL: (AppViewHolder<Any>.() -> Unit)? = null
     private var onBind: (AppViewHolder<T>.(item: T?) -> Unit)? = null
-    private var onCreateL: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<Any>)? = null
     private var onCreate: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<T>)? = null
     private var layoutRes: Int = -1
     private var viewType: ((pos: Int) -> Int)? = null
@@ -23,12 +21,6 @@ open class AppPagedListAdapter<T>(
     private inner class AppVH(v: View) : AppViewHolder<T>(v) {
         override fun onBind(item: T?) {
             onBind?.invoke(this, item)
-        }
-    }
-
-    private inner class AppLVH(v: View) : AppViewHolder<Any>(v) {
-        override fun onBind(item: Any?) {
-            onBindL?.invoke(this)
         }
     }
 
@@ -52,11 +44,8 @@ open class AppPagedListAdapter<T>(
     constructor(
         diffCallback: DiffUtil.ItemCallback<T>,
         onCreateVH: (parent: ViewGroup, viewType: Int) -> AppViewHolder<T>
-        , onCreateLVH: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<Any>)? = null
     ) : this(diffCallback) {
-
         this.onCreate = onCreateVH
-        this.onCreateL = onCreateLVH
     }
 
 
@@ -67,13 +56,10 @@ open class AppPagedListAdapter<T>(
         diffCallback: DiffUtil.ItemCallback<T>,
         layoutRes: Int
         , onBindVH: (AppViewHolder<T>.(item: T?) -> Unit)
-        , onBindLVH: (AppViewHolder<Any>.() -> Unit)? = null
-
     ) : this(diffCallback) {
 
         this.layoutRes = layoutRes
         this.onBind = onBindVH
-        this.onBindL = onBindLVH
     }
 
 
@@ -84,11 +70,9 @@ open class AppPagedListAdapter<T>(
         diffCallback: DiffUtil.ItemCallback<T>,
         getViewType: (pos: Int) -> Int
         ,onCreateVH: (parent: ViewGroup, viewType: Int) -> AppViewHolder<T>
-        , onCreateLVH: ((parent: ViewGroup, viewType: Int) -> AppViewHolder<Any>)? = null
     ) : this(diffCallback) {
 
         this.onCreate = onCreateVH
-        this.onCreateL = onCreateLVH
         this.viewType = getViewType
     }
 
@@ -127,20 +111,6 @@ open class AppPagedListAdapter<T>(
     }
 
     final override fun onBindBasicVH(holder: AppViewHolder<T>, position: Int) {
-        holder.onBind(getItem(position))
-    }
-
-    override fun onCreateLVH(parent: ViewGroup, viewType: Int): AppViewHolder<Any> {
-        return this.onCreateL?.invoke(parent, viewType)?.also {
-            it.adapter = this
-            it.onCreate(viewType)
-        } ?: AppLVH(View(parent.context)).also {
-            it.adapter = this
-            it.onCreate(viewType)
-        }
-    }
-
-    final override fun onBindLVH(holder: AppViewHolder<Any>, position: Int) {
         holder.onBind(getItem(position))
     }
 
