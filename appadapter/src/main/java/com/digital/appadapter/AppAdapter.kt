@@ -77,7 +77,7 @@ open class AppAdapter<T>() : AppBasicAdapter<T, AppViewHolder<T>>() {
         return super.getItemCount()
     }
 
-    final override fun getItemViewType(position: Int): Int {
+   override fun getItemViewType(position: Int): Int {
         return itemType?.invoke(position) ?: super.getItemViewType(position)
     }
 

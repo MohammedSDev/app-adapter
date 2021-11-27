@@ -2,11 +2,7 @@ package com.digital.appadapter
 
 import android.graphics.drawable.Drawable
 import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,7 +13,7 @@ abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
     internal var adapter: RecyclerView.Adapter<*>? = null
     private var tag: String? = null
     private val onClickListener = View.OnClickListener {
-        callback?.invoke(it, adapterPosition, getItem()!!, tag)
+        callback?.invoke(it, bindingAdapterPosition, getItem()!!, tag)
     }
 
     fun <A : AppRecyclerAdapter<M>> getAdapter(): A {
@@ -28,7 +24,7 @@ abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
         return customFindCachedViewById(id) as T
     }
 
-    fun getItem(pos: Int = adapterPosition): M? =
+    fun getItem(pos: Int = bindingAdapterPosition): M? =
         runCatching { getAdapter<AppRecyclerAdapter<M>>()?.getItemModel(pos) }.getOrNull()
 
     private val callback
@@ -42,7 +38,8 @@ abstract class AppViewHolder<M>(v: View) : RecyclerView.ViewHolder(v) {
     fun getString(@StringRes resId:Int):String = itemView.context.getString(resId)
     fun getColorComp(@ColorRes resId:Int):Int = ContextCompat.getColor(itemView.context,resId)
     fun getDrawableComp(@DrawableRes resId:Int):Drawable? = ContextCompat.getDrawable(itemView.context,resId)
-    fun getDimenComp(@DimenRes resId:Int):Float? = itemView.context.resources.getDimension(resId)
+    fun getDimenComp(@DimenRes resId:Int):Float = itemView.context.resources.getDimension(resId)
+    fun getPluralComp(@PluralsRes resId:Int, quantity:Int, vararg args:Any):String = itemView.context.resources.getQuantityString(resId,quantity,args)
 
 
 
